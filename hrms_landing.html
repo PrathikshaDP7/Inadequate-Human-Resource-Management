@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HRMS — A digital home for every HR process</title>
+<style>
+  :root{
+    --navy:#1E2761; --navy-dark:#141B47; --ink:#161B33; --paper:#F6F7FB; --card:#FFFFFF;
+    --border:#E3E6F0; --gold:#C9932F; --muted:#63698A; --ice:#EAF0FF;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#10121C; --card:#191C2B; --border:#2A2E45; --ink:#EDEFF7; --muted:#9AA0BE; --ice:#212852;
+    }
+  }
+  :root[data-theme="dark"]{ --paper:#10121C; --card:#191C2B; --border:#2A2E45; --ink:#EDEFF7; --muted:#9AA0BE; --ice:#212852; }
+  *{box-sizing:border-box;}
+  html{ scroll-behavior:smooth; scroll-padding-top:calc(70px + env(safe-area-inset-top,0px)); }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif; line-height:1.5; }
+  h1,h2,h3{ font-family:Georgia,Cambria,"Times New Roman",serif; margin:0; color:var(--ink); }
+  p{ margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 28px; }
+  section{ padding:76px 0; }
+  img,svg{ max-width:100%; }
+  .overflow-x{ overflow-x:auto; }
+
+  header{ position:sticky; top:0; z-index:20; background:var(--paper); border-bottom:1px solid var(--border); padding-top:env(safe-area-inset-top,0px); }
+  .navrow{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1100px; margin:0 auto; }
+  .logo{ font-family:Georgia,Cambria,serif; font-weight:700; font-size:18px; }
+  nav{ display:flex; gap:26px; font-size:14px; color:var(--muted); }
+  nav a:hover{ color:var(--ink); }
+  .cta{ background:var(--navy); color:#fff; padding:9px 18px; border-radius:8px; font-size:13.5px; font-weight:600; white-space:nowrap; }
+  @media (max-width:720px){ nav{ display:none; } }
+
+  .hero{ padding:64px 0 80px; }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:48px; align-items:center; }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+  .hero h1{ font-size:44px; line-height:1.12; letter-spacing:-.5px; }
+  @media (max-width:520px){ .hero h1{ font-size:32px; } }
+  .hero p.lead{ margin-top:18px; font-size:17px; color:var(--muted); max-width:480px; }
+  .hero-ctas{ margin-top:30px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary{ background:var(--gold); color:#20140a; padding:13px 22px; border-radius:9px; font-weight:700; font-size:14.5px; }
+  .btn-secondary{ border:1.5px solid var(--border); padding:12px 20px; border-radius:9px; font-weight:600; font-size:14.5px; color:var(--ink); }
+
+  /* Mock UI preview */
+  .mock{ background:var(--navy); border-radius:16px; padding:14px; box-shadow:0 30px 60px rgba(20,27,71,.25); }
+  .mock-bar{ display:flex; gap:6px; padding:2px 4px 12px; }
+  .mock-dot{ width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.25); }
+  .mock-body{ background:var(--card); border-radius:10px; padding:18px; }
+  .mock-title{ font-size:12.5px; color:var(--muted); margin-bottom:12px; }
+  .mock-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+  .mock-stat{ background:var(--ice); border-radius:8px; padding:10px 12px; }
+  .mock-stat b{ display:block; font-size:19px; color:var(--navy); }
+  :root[data-theme="dark"] .mock-stat b{ color:#9DB3F5; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mock-stat b{ color:#9DB3F5; } }
+  .mock-stat span{ font-size:10.5px; color:var(--muted); }
+  .mock-rows{ display:flex; flex-direction:column; gap:8px; }
+  .mock-row{ display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border); border-radius:7px; padding:8px 11px; font-size:11.5px; }
+  .mock-pill{ background:var(--gold); color:#20140a; font-size:9.5px; font-weight:700; padding:2px 8px; border-radius:10px; }
+
+  .eyebrow-free-title{ font-size:30px; max-width:560px; }
+  .section-sub{ color:var(--muted); font-size:15px; max-width:600px; margin-top:12px; }
+
+  .problem-list{ margin-top:36px; border-top:1px solid var(--border); }
+  .problem-item{ display:flex; gap:24px; padding:22px 0; border-bottom:1px solid var(--border); }
+  .problem-item .num{ font-family:Georgia,serif; font-size:20px; color:var(--gold); width:34px; flex-shrink:0; }
+  .problem-item h3{ font-size:16.5px; margin-bottom:4px; }
+  .problem-item p{ font-size:14px; color:var(--muted); }
+
+  .feat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:36px; }
+  @media (max-width:900px){ .feat-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:520px){ .feat-grid{ grid-template-columns:1fr; } }
+  .feat-card{ background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .feat-card h3{ font-size:15px; margin-bottom:6px; }
+  .feat-card p{ font-size:13px; color:var(--muted); }
+
+  .roles-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:36px; }
+  @media (max-width:820px){ .roles-grid{ grid-template-columns:1fr; } }
+  .role-panel{ border:1.5px solid var(--border); border-radius:14px; padding:26px; background:var(--card); }
+  .role-panel.highlight{ border-color:var(--gold); }
+  .role-panel h3{ font-size:18px; margin-bottom:10px; }
+  .role-panel ul{ margin:0; padding-left:18px; color:var(--muted); font-size:13.5px; line-height:1.7; }
+
+  .stack-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:30px; }
+  .stack-chip{ border:1px solid var(--border); background:var(--card); padding:9px 15px; border-radius:20px; font-size:13px; color:var(--ink); }
+
+  .closing{ background:var(--navy); color:#fff; border-radius:20px; padding:56px 44px; text-align:center; margin:0 auto; }
+  .closing h2{ color:#fff; font-size:28px; }
+  .closing p{ color:#C6CEF0; margin-top:12px; font-size:15px; }
+  .closing .hero-ctas{ justify-content:center; margin-top:26px; }
+
+  footer{ padding:36px 0 48px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navrow">
+    <div class="logo">HRMS</div>
+    <nav>
+      <a href="#problem">Problem</a>
+      <a href="#features">Features</a>
+      <a href="#roles">How it works</a>
+      <a href="#stack">Tech</a>
+    </nav>
+    <a class="cta" href="https://claude.ai/artifact/LwqGUm4Fj4EtJLz54UXnvr" target="_blank" rel="noopener">Try the demo</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>A digital home for every HR process</h1>
+        <p class="lead">One platform for attendance, leave, and grievances — replacing scattered spreadsheets and paperwork with a single source of truth for employees, managers, and HR.</p>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="https://claude.ai/artifact/LwqGUm4Fj4EtJLz54UXnvr" target="_blank" rel="noopener">Try the live prototype</a>
+          <a class="btn-secondary" href="#problem">See how it works</a>
+        </div>
+      </div>
+      <div class="mock">
+        <div class="mock-bar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+        <div class="mock-body">
+          <div class="mock-title">Organization overview</div>
+          <div class="mock-stats">
+            <div class="mock-stat"><b>6</b><span>Employees</span></div>
+            <div class="mock-stat"><b>4/6</b><span>Present today</span></div>
+            <div class="mock-stat"><b>2</b><span>Open grievances</span></div>
+          </div>
+          <div class="mock-rows">
+            <div class="mock-row"><span>Sneha Iyer — Earned Leave</span><span class="mock-pill">Pending</span></div>
+            <div class="mock-row"><span>Rohan Mehta — Sick Leave</span><span class="mock-pill" style="background:#227A46;color:#fff;">Approved</span></div>
+            <div class="mock-row"><span>Laptop replacement ticket</span><span class="mock-pill" style="background:#28418C;color:#fff;">In progress</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="problem">
+    <div class="wrap">
+      <h2 class="eyebrow-free-title">HR still runs on spreadsheets and paperwork</h2>
+      <p class="section-sub">Across most organizations, employee data lives in disconnected registers and email threads — causing delays, errors, and zero real-time visibility for decision-makers.</p>
+      <div class="problem-list">
+        <div class="problem-item"><div class="num">01</div><div><h3>Fragmented records</h3><p>Attendance, leave, and personal files scattered across paper and spreadsheets.</p></div></div>
+        <div class="problem-item"><div class="num">02</div><div><h3>Delayed approvals</h3><p>Leave requests and reimbursements pass through email, with no tracked status.</p></div></div>
+        <div class="problem-item"><div class="num">03</div><div><h3>No grievance trail</h3><p>Complaints go unresolved with no accountability or escalation path.</p></div></div>
+        <div class="problem-item"><div class="num">04</div><div><h3>Blind decision-making</h3><p>HR and managers have no live view of headcount, attendance, or pending work.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" style="background:var(--card); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <h2 class="eyebrow-free-title">Everything HR needs, in one place</h2>
+      <p class="section-sub">Core modules built for the full employee lifecycle — not just a task at a time.</p>
+      <div class="feat-grid">
+        <div class="feat-card"><h3>Recruitment &amp; onboarding</h3><p>Job postings, applicant tracking, and paperless onboarding.</p></div>
+        <div class="feat-card"><h3>Attendance &amp; leave</h3><p>App-based check-in with automatic leave balance calculation.</p></div>
+        <div class="feat-card"><h3>Payroll &amp; compliance</h3><p>Automated payroll runs with tax, PF, and ESI handled for you.</p></div>
+        <div class="feat-card"><h3>Performance reviews</h3><p>KPI tracking and 360° feedback replacing annual guesswork.</p></div>
+        <div class="feat-card"><h3>Grievance redressal</h3><p>SLA-backed tickets that move through clear resolution stages.</p></div>
+        <div class="feat-card"><h3>Training &amp; growth</h3><p>Skill-gap analysis paired with e-learning and certification tracking.</p></div>
+        <div class="feat-card"><h3>Live analytics</h3><p>Headcount, attrition risk, and attendance in one dashboard.</p></div>
+        <div class="feat-card"><h3>Document vault</h3><p>Every employee record, stored securely and retrievable in seconds.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roles">
+    <div class="wrap">
+      <h2 class="eyebrow-free-title">Built for how each role actually works</h2>
+      <p class="section-sub">The same platform, three different jobs to do.</p>
+      <div class="roles-grid">
+        <div class="role-panel">
+          <h3>Employee</h3>
+          <ul>
+            <li>Mark daily attendance in one tap</li>
+            <li>Apply for leave and track balance</li>
+            <li>Raise and follow grievances</li>
+          </ul>
+        </div>
+        <div class="role-panel highlight">
+          <h3>Manager</h3>
+          <ul>
+            <li>Approve or reject leave requests</li>
+            <li>See team attendance at a glance</li>
+            <li>Track grievances raised by the team</li>
+          </ul>
+        </div>
+        <div class="role-panel">
+          <h3>HR Admin</h3>
+          <ul>
+            <li>Organization-wide attendance and headcount</li>
+            <li>Move every grievance through resolution</li>
+            <li>Spot attrition risk before it happens</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack" style="background:var(--card); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <h2 class="eyebrow-free-title">Built on a simple, dependable stack</h2>
+      <p class="section-sub">Open-source and cloud-ready, with no proprietary licensing cost.</p>
+      <div class="stack-row">
+        <span class="stack-chip">React.js</span>
+        <span class="stack-chip">Flutter</span>
+        <span class="stack-chip">Node.js / Django</span>
+        <span class="stack-chip">PostgreSQL</span>
+        <span class="stack-chip">MongoDB</span>
+        <span class="stack-chip">Python analytics</span>
+        <span class="stack-chip">OAuth2 / JWT</span>
+        <span class="stack-chip">AWS / Azure</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="closing">
+        <h2>See it in action</h2>
+        <p>Log in as an employee, a manager, or HR admin and explore the working prototype.</p>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="https://claude.ai/artifact/LwqGUm4Fj4EtJLz54UXnvr" target="_blank" rel="noopener">Try the live prototype</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>HRMS — College Project, Problem Statement: Inadequate Human Resource Management</span>
+  <span>Team Name · Department · College Name</span>
+</footer>
+
+</body>
+</html>
